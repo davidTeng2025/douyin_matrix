@@ -15,17 +15,18 @@ const { getPrefixCls } = useDesign()
 
 const prefixCls = getPrefixCls('breadcrumb')
 
-const appStore = useAppStore()
-
-// 面包屑图标
-const breadcrumbIcon = computed(() => appStore.getBreadcrumbIcon)
-
 export default defineComponent({
   name: 'Breadcrumb',
   setup() {
     const { currentRoute } = useRouter()
 
     const { t } = useI18n()
+    
+    // 将appStore移到setup函数内部
+    const appStore = useAppStore()
+    
+    // 面包屑图标
+    const breadcrumbIcon = computed(() => appStore.getBreadcrumbIcon)
 
     const levelList = ref<AppRouteRecordRaw[]>([])
 

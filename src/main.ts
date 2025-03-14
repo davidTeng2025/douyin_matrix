@@ -19,6 +19,9 @@ import { setupElementPlus } from '@/plugins/elementPlus'
 // 引入 form-create
 import { setupFormCreate } from '@/plugins/formCreate'
 
+// 引入 Vant
+import { setupVant } from '@/plugins/vant'
+
 // 引入全局样式
 import '@/styles/index.scss'
 
@@ -45,16 +48,20 @@ import VueDOMPurifyHTML from 'vue-dompurify-html' // 解决v-html 的安全隐�
 // 创建实例
 const setupAll = async () => {
   const app = createApp(App)
+  
+  // 确保 Pinia 尽早初始化
+  setupStore(app)
 
   await setupI18n(app)
-
-  setupStore(app)
 
   setupGlobCom(app)
 
   setupElementPlus(app)
 
   setupFormCreate(app)
+  
+  // 设置 Vant
+  setupVant(app)
 
   setupRouter(app)
 

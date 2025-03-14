@@ -3,6 +3,7 @@ import type { ConfigEnv, UserConfig } from 'vite'
 import { loadEnv } from 'vite'
 import { createVitePlugins } from './build/vite'
 import { exclude, include } from "./build/vite/optimize"
+import https from 'https'
 // 当前执行node命令时文件夹的地址(工作目录)
 const root = process.cwd()
 
@@ -28,15 +29,25 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
             port: env.VITE_PORT, // 端口号
             host: "0.0.0.0",
             open: env.VITE_OPEN === 'true',
-            // 本地跨域代理. 目前注释的原因：暂时没有用途，server 端已经支持跨域
+            // 本地跨域代理
             proxy: {
+                // 保留原有的 /dev-abp 代理配置
                 [env.VITE_API_URL_ABP]: {
                     target: `https://172.31.13.6:8991`,
                     ws: false,
                     changeOrigin: true,
                     rewrite: (path) => path.replace(new RegExp(`^${env.VITE_API_URL_ABP}`), ''),
-                    secure: false
+                    secure: false,
+                    agent: new https.Agent({ rejectUnauthorized: false }),
                 },
+                // 添加 yudao 项目中的 /abp 代理配置
+                '/abp': {
+                    target: 'https://172.31.13.6:8991',
+                    changeOrigin: true,
+                    secure: false,
+                    agent: new https.Agent({ rejectUnauthorized: false }),
+                    // logLevel: 'debug'
+                }
             },
         },
         // 项目使用的vite插件。 单独提取到build/vite/plugin中管理

@@ -1,0 +1,15 @@
+/**
+* 通用css样式布局处理
+* Copyright (c) 2025 @author Dazhi Ni
+*/
+
+/** 基础通用 **/
+// 定义 ellipsis 样式，并使用 CSS 变量作为 max-width 的值
+.ellipsis-text {
+  display: inline-block;
+  max-width: var(--ellipsis-max-width, 50px); // 如果变量未定义，默认使用 50px
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
